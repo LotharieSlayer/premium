@@ -1,4 +1,5 @@
-const { setupPremium } = require("../utils/enmapUtils");
+/* eslint-disable no-case-declarations */
+const { upsert } = require("../../../utils/mongoUtils");
 
 async function addSetupCommand(slashCommand) {
     slashCommand.addSubcommand((subcommand) =>
@@ -24,14 +25,17 @@ async function addSetupCommand(slashCommand) {
  * Fonction appelé quand la commande est 'setup'
  * @param {CommandInteraction} interaction L'interaction généré par l'exécution de la commande.
  */
-async function execute(interaction) {
+async function execute(interaction, client) {
     switch (interaction.options._subcommand) {
         case "premium":
-            // eslint-disable-next-line no-case-declarations
             const premiumRoles = interaction.options
                 .getString("premium_roles")
                 .split(",");
-            setupPremium.set(interaction.guild.id, premiumRoles);
+
+            // MongoDB
+            const collectionPremium = client.mongo.commons.collection("premium")
+            upsert(interaction.guild.id, premiumRoles, collectionPremium)
+            
             await interaction.reply({
                 content: `**Setup des rôles premium terminés !**\nRôles premium : ${premiumRoles}`,
                 ephemeral: true,
