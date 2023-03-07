@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-const { upsert } = require("../../../utils/mongoUtils");
+const { upsert, get } = require("../../../utils/mongoUtils");
 
 async function addSetupCommand(slashCommand) {
     slashCommand.addSubcommand((subcommand) =>
@@ -34,7 +34,7 @@ async function execute(interaction, client) {
 
             // MongoDB
             const collectionPremium = client.mongo.commons.collection("premium")
-            upsert(interaction.guild.id, premiumRoles, collectionPremium)
+            await upsert(interaction.guild.id, premiumRoles, collectionPremium)
             
             await interaction.reply({
                 content: `**Setup des rôles premium terminés !**\nRôles premium : ${premiumRoles}`,
