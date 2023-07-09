@@ -61,7 +61,10 @@ async function execute(interaction, client) {
 	// Retirer toutes les couleurs sauf celle choisie
 	for(let color in JsonColors){
 		if(member.roles.cache.has(JsonColors[color].value)){
-			if(JsonColors[color].value === color) continue;
+			if(JsonColors[color].value === color) {
+				await member.roles.remove(JsonColors[color].value);
+				return;
+			}
 			await member.roles.remove(JsonColors[color].value);
 		}
 	}
