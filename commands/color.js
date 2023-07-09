@@ -56,30 +56,25 @@ async function execute(interaction, client) {
 	}
 
 	const member = interaction.member;
-	const color = interaction.options.getString("color");
+	const colorChoose = interaction.options.getString("color");
 
 	// Retirer toutes les couleurs sauf celle choisie
 	for(let color in JsonColors){
 		if(member.roles.cache.has(JsonColors[color].value)){
-			if(JsonColors[color].value === color) {
+			if(JsonColors[color].value === colorChoose) {
 				await member.roles.remove(JsonColors[color].value);
+				await interaction.reply({
+					content: `Tu as retiré ta couleur !`,
+					ephemeral: true,
+				});
 				return;
 			}
 			await member.roles.remove(JsonColors[color].value);
 		}
 	}
 
-	// Si l'utilisateur a déjà la couleur
-	if(member.roles.cache.has(color)){
-		await interaction.reply({
-			content: `Tu as déjà cette couleur !`,
-			ephemeral: true,
-		});
-		return;
-	}
-
 	// Ajouter la couleur
-	await member.roles.add(color);
+	await member.roles.add(colorChoose);
 
 	// Répondre à l'utilisateur
 	await interaction.reply({
