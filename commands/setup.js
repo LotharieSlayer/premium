@@ -35,9 +35,15 @@ async function execute(interaction, client) {
             // MongoDB
             const collectionPremium = client.mongo.commons.collection("premium")
             await upsert(interaction.guild.id, premiumRoles, collectionPremium)
+
+			// Build string
+			let premiumRolesString = "";
+			for(let i = 0; i < premiumRoles.length; i++){
+				premiumRolesString += `<@&${premiumRoles[i]}> `;
+			}
             
             await interaction.reply({
-                content: `**Setup des rôles premium terminés !**\nRôles premium : ${premiumRoles}`,
+                content: `**Setup des rôles premium terminés !**\nRôles premium : ${premiumRolesString}`,
                 ephemeral: true,
             });
             break;
